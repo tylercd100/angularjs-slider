@@ -24,7 +24,8 @@ angular.module('rzModule', [])
               '<span class="rz-bubble rz-limit"></span>' + // 5 Ceiling label
               '<span class="rz-bubble"></span>' + // 6 Label above left slider handle
               '<span class="rz-bubble"></span>' + // 7 Label above right slider handle
-              '<span class="rz-bubble"></span>'; // 8 Range label when the slider handles are close ex. 15 - 17
+              '<span class="rz-bubble"></span>' + // 8 Range label when the slider handles are close ex. 15 - 17
+              '<span class="rz-ticks"></span>'; //9 Ticks for below the slider
   $templateCache.put('rzSliderTpl.html', template);
 }])
 
@@ -121,6 +122,12 @@ function throttle(func, wait, options) {
      * @type {number}
      */
     this.handleHalfWidth = 0;
+
+    /**
+     * Ticks for the slider
+     * @type {Array}
+     */
+    this.ticks = scope.rzSliderTicks;
 
     /**
      * Always show selection bar
@@ -247,6 +254,7 @@ function throttle(func, wait, options) {
       this.initElemHandles();
       this.calcViewDimensions();
       this.setMinAndMax();
+      this.updateTicksBar();
 
       this.precision = this.scope.rzSliderPrecision === undefined ? 0 : +this.scope.rzSliderPrecision;
       this.step = this.scope.rzSliderStep === undefined ? 1 : +this.scope.rzSliderStep;
@@ -349,6 +357,7 @@ function throttle(func, wait, options) {
       this.calcViewDimensions();
       this.updateCeilLab();
       this.updateFloorLab();
+      this.updateTicksBar();
     },
 
     /**
@@ -467,6 +476,7 @@ function throttle(func, wait, options) {
           case 6: this.minLab = jElem; break;
           case 7: this.maxLab = jElem; break;
           case 8: this.cmbLab = jElem; break;
+          case 9: this.ticksBar = jElem; break;
         }
 
       }, this);
@@ -481,6 +491,7 @@ function throttle(func, wait, options) {
       this.minLab.rzsl = 0;
       this.maxLab.rzsl = 0;
       this.cmbLab.rzsl = 0;
+      this.ticksBar.rzsl = 0;
 
       // Hide limit labels
       if(this.hideLimitLabels)
@@ -508,6 +519,24 @@ function throttle(func, wait, options) {
       {
         this.maxH.remove();
         this.selBar.remove();
+      }
+    },
+
+    /**
+     * [updateTicksBar description]
+     */
+    updateTicksBar: function ()
+    {
+      var self = this;
+      if(this.ticks){
+        console.log(this.ticks)
+
+        //clear it
+        this.ticksBar.html('');
+        angular.forEach(this.ticks,function(tick,index){
+          console.log(arguments)
+          this.ticksBar.append('<span class="rz-tick" style="left:'+index/(this.ticks.length-1)*100+'%;">'+tick+'</span>')
+        },this)
       }
     },
 
@@ -1032,6 +1061,7 @@ function throttle(func, wait, options) {
   return {
     restrict: 'E',
     scope: {
+      rzSliderTicks: '=',
       rzSliderFloor: '=?',
       rzSliderCeil: '=?',
       rzSliderStep: '@',
@@ -1041,7 +1071,7 @@ function throttle(func, wait, options) {
       rzSliderTranslate: '&',
       rzSliderHideLimitLabels: '=?',
       rzSliderAlwaysShowBar: '=?',
-      rzSliderPresentOnly: '@'
+      rzSliderPresentOnly: '@',
     },
 
     /**
@@ -1058,6 +1088,7 @@ function throttle(func, wait, options) {
 
     link: function(scope, elem, attr)
     {
+      console.log(scope.rzSliderTicks)
       return new Slider(scope, elem, attr);
     }
   };

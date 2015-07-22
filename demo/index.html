@@ -18,15 +18,28 @@
         </header>
 
         <article>
+            <h2>Min/max slider example with ticks</h2>
+            Value: <pre>{{ slider_data_with_ticks | json }}</pre>
+
+            <rzslider
+                rz-slider-floor="0"
+                rz-slider-ceil="100"
+                rz-slider-step="10"
+                rz-slider-precision="1"
+                rz-slider-model="slider_data_with_ticks.value"
+                rz-slider-ticks="slider_data_with_ticks.ticks"></rzslider>
+        </article>
+
+        <article>
             <h2>Min/max slider example</h2>
             Value: <pre>{{ slider_data | json }}</pre>
 
             <rzslider
-                    rz-slider-floor="0.5"
-                    rz-slider-ceil="10.5"
-                    rz-slider-step="0.3"
-                    rz-slider-precision="1"
-                    rz-slider-model="slider_data.value"></rzslider>
+                rz-slider-floor="0.5"
+                rz-slider-ceil="10.5"
+                rz-slider-step="0.3"
+                rz-slider-precision="1"
+                rz-slider-model="slider_data.value"></rzslider>
         </article>
 
         <article>
@@ -113,6 +126,7 @@
         };
 
         $scope.slider_data = {value: 1};
+        $scope.slider_data_with_ticks = {value: 30,ticks: [0,20,40,60,80,100]};
     });
 </script>
 
