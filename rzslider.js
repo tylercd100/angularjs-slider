@@ -255,6 +255,7 @@ function throttle(func, wait, options) {
       this.calcViewDimensions();
       this.setMinAndMax();
       this.updateTicksBar();
+      this.updateHandles(this.tracking, this.maxLeft);
 
       this.precision = this.scope.rzSliderPrecision === undefined ? 0 : +this.scope.rzSliderPrecision;
       this.step = this.scope.rzSliderStep === undefined ? 1 : +this.scope.rzSliderStep;
@@ -1088,7 +1089,6 @@ function throttle(func, wait, options) {
 
     link: function(scope, elem, attr)
     {
-      console.log(scope.rzSliderTicks)
       return new Slider(scope, elem, attr);
     }
   };
